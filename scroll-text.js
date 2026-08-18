@@ -5,11 +5,22 @@ Scroll Text Section JS
 function initScrollText() {
   gsap.registerPlugin(ScrollTrigger, SplitText);
 
-  const EXPAND_VH = 80;
-  const STEP_VH = 160;
-  const FINAL_STEP_VH = 60;
+  // Scroll distance for the expand animation, in viewport height units. 80 = 80vh.
+  const EXPAND_VH = 60;
+
+  // Scroll distance for each main animation step. 160 = 160vh.
+  const STEP_VH = 80;
+
+  // Scroll distance for the final animation step. 60 = 60vh.
+  const FINAL_STEP_VH = 40;
+
+  // Target scale for the parallax/zoom effect. 1.05 = 105% of original size.
   const PARALLAX_SCALE_TO = 1.05;
+
+  // Delay between each character animation, in seconds.
   const CHAR_STAGGER = 0.02;
+
+  // Vertical offset for character animations, usually in pixels. 20 = starts 20px away from final position.
   const CHAR_Y_OFFSET = 20;
 
   const scrollText = {
@@ -37,10 +48,6 @@ function initScrollText() {
       return { img, chars: split ? split.chars : [] };
     });
 
-    // NOTE: with pin:true, GSAP inserts its own spacer element sized to match the
-    // scroll distance automatically -- we no longer need to manually measure the
-    // sticky's height or set component.style.height ourselves. That whole "Pass 1"
-    // height-calculation step from the CSS-sticky version is gone.
     const animationVH = EXPAND_VH + (panels.length - 1) * STEP_VH + FINAL_STEP_VH;
 
     const clipFrom = `inset(${scrollText.startInset}% round ${scrollText.startRadius})`;
@@ -81,8 +88,8 @@ function initScrollText() {
       defaults: { ease: 'none' },
       scrollTrigger: {
         trigger: component,
-        pin: pinTarget, // GSAP-managed pin, independent of CSS sticky / ancestor transform issues
-        pinSpacing: true, // inserts the spacer -- replaces our old manual height calc
+        pin: pinTarget,
+        pinSpacing: true,
         start: 'top top',
         end: '+=' + animationVH + '%',
         scrub: true,
