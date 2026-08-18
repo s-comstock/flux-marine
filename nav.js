@@ -75,8 +75,9 @@ function initNav() {
         duration: .8,
       }, '<')
       .to(navHr, { width: '100%', stagger: 0.08, duration: .8 }, '-=0.8')
-      .to(toggleBar[0], { y: '+=5', rotation: 45, duration: .8 }, '<')
-      .to(toggleBar[1], { y: '-=5', rotation: -45, duration: .8 }, '<')
+      .to(toggleBar[0], { y: '+=7', rotation: 45, duration: .8 }, '<') // Top Line
+      .to(toggleBar[1], { scaleX: 0, autoAlpha: 0, duration: .6 }, '<') // Middle Line
+      .to(toggleBar[2], { y: '-=6', rotation: -45, duration: .8 }, '<') // Bottom Line
       .to(navTextSplit, {
         yPercent: 0,
         duration: .6,
@@ -100,11 +101,12 @@ function initNav() {
     tlLeave
       .to(navHr, { width: 0, duration: .3, stagger: 0.04 })
       .to(navTextSplit, { yPercent: -100, duration: .4, stagger: 0.04 }, '<')
-      .to(toggleBar[0], { y: 0, rotation: 0, duration: .5 }, '<')
-      .to(toggleBar[1], { y: 0, rotation: 0, duration: .5 }, '<')
+      .to(toggleBar[0], { y: 0, rotation: 0, duration: .5 }, '<') // Top Line
+      .to(toggleBar[2], { y: 0, rotation: 0, duration: .5 }, '<') // Bottom Line
+      .to(toggleBar[1], { scaleX: 1, autoAlpha: 1, duration: .8, delay: .2 }, '<') // Middle Line
       .to(navMenu, { height: 0, duration: .6 }, '<')
       .to(navbarComponent, { background: 'rgba(0, 0, 0, 0)', duration: .3 }, '<')
-      .set(navMenu, { display: 'none' }); // <-- this one you DO need
+      .set(navMenu, { display: 'none' });
 
     let isOpen = false;
     // Mobile Menu Toggle Interaction
@@ -113,7 +115,7 @@ function initNav() {
     function getFocusableElements() {
       const selector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
       return Array.from(navbarComponent.querySelectorAll(selector))
-        .filter(el => el.offsetParent !== null); // only currently-visible elements
+        .filter(el => el.offsetParent !== null);
     }
 
     let removeFocusTrap = null;
@@ -181,4 +183,21 @@ function initNav() {
     toggleButton.addEventListener('click', toggle);
 
   }
+
+  // Reload page when moving from screen sizes below 992px to greater than 992px
+  const desktopBreakpoint = window.matchMedia('(min-width: 992px)');
+
+  const handleBreakpointChange = (event) => {
+    if (event.matches) {
+      window.location.reload();
+    }
+  };
+
+  // Breakpoint Reload browser compatability
+  if (desktopBreakpoint.addEventListener) {
+    desktopBreakpoint.addEventListener('change', handleBreakpointChange);
+  } else {
+    desktopBreakpoint.addListener(handleBreakpointChange);
+  }
+
 }
