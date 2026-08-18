@@ -1,99 +1,147 @@
-function initScrollText() {
-  gsap.registerPlugin(ScrollTrigger);
+/*--------------------
+Scroll Text Section JS
+--------------------*/
 
-  const EXPAND_VH = 100;
-  const STEP_VH = 100;
+function initScrollText() {
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+
+  const EXPAND_VH = 80;
+  const STEP_VH = 160;
+  const FINAL_STEP_VH = 60;
+  const PARALLAX_SCALE_TO = 1.05;
+  const CHAR_STAGGER = 0.02;
+  const CHAR_Y_OFFSET = 20;
 
   const scrollText = {
     startInset: (100 * (1 - 1 / 3)) / 2,
     startRadius: '0.75rem',
     endRadius: '0rem'
   };
+  const CROSSFADE_EASE = 'power1.inOut';
+  const EXPAND_EASE = 'power2.out';
 
   const components = document.querySelectorAll('[data-scroll-text-component]');
   if (!components.length) return;
 
-  const setups = [];
-
   components.forEach((component) => {
-    const sticky = component.querySelector('[data-scroll-sticky]');
+    // This is now purely the element GSAP will pin -- no CSS position/top needed on it anymore.
+    const pinTarget = component.querySelector('[data-scroll-sticky]');
     const mask = component.querySelector('[data-scroll-panel-mask]');
     const panels = mask ? Array.from(mask.querySelectorAll('[data-scroll-panel]')) : [];
-    if (!sticky || !mask || !panels.length) return;
+    if (!pinTarget || !mask || !panels.length) return;
 
-    const panelData = panels.map((panel) => ({
-      text: panel.querySelector('[data-scroll-text]'),
-      img: panel.querySelector('[data-background-img]')
-    }));
+    const panelData = panels.map((panel) => {
+      const text = panel.querySelector('[data-scroll-text]');
+      const img = panel.querySelector('[data-background-img]');
+      const split = text ? new SplitText(text, { type: 'chars' }) : null;
+      return { img, chars: split ? split.chars : [] };
+    });
 
-    // Measure the sticky's actual height as %vh, so this stays correct if that class ever changes
-    const stickyVH = (sticky.getBoundingClientRect().height / window.innerHeight) * 100;
+    // NOTE: with pin:true, GSAP inserts its own spacer element sized to match the
+    // scroll distance automatically -- we no longer need to manually measure the
+    // sticky's height or set component.style.height ourselves. That whole "Pass 1"
+    // height-calculation step from the CSS-sticky version is gone.
+    const animationVH = EXPAND_VH + (panels.length - 1) * STEP_VH + FINAL_STEP_VH;
 
-    const animationVH = EXPAND_VH + panels.length *
-      STEP_VH; // scroll distance needed WHILE pinned
-    const totalVH = stickyVH +
-      animationVH; // section height = sticky's own height + the pinned distance
-
-    component.style.height = `${totalVH}vh`;
-
-    setups.push({ component, mask, panelData, animationVH });
-  });
-
-  if (!setups.length) return;
-
-  if (window.lenis) window.lenis.resize();
-  ScrollTrigger.refresh();
-
-  setups.forEach(({ component, mask, panelData, animationVH }) => {
     const clipFrom = `inset(${scrollText.startInset}% round ${scrollText.startRadius})`;
     const clipTo = `inset(0% round ${scrollText.endRadius})`;
 
+    const expandDuration = EXPAND_VH / 100;
+    const stepDuration = STEP_VH / 100;
+    const finalStepDuration = FINAL_STEP_VH / 100;
+    const swapDuration = stepDuration * 0.4;
+
+    let cursor = 0;
+    const windows = panelData.map((_, i) => {
+      const isLast = i === panelData.length - 1;
+      const duration = i === 0 ?
+        expandDuration + stepDuration :
+        (isLast ? finalStepDuration : stepDuration);
+      const start = cursor;
+      const end = start + duration;
+      cursor = end;
+      return { start, end };
+    });
+    const totalDuration = windows[windows.length - 1].end;
+
     gsap.set(mask, { clipPath: clipFrom });
-    panelData.forEach(({ img, text }, i) => {
-      if (img) gsap.set(img, { opacity: i === 0 ? 1 : 0 });
-      if (text) gsap.set(text, { yPercent: i === 0 ? 0 : 100 });
+    panelData.forEach(({ img, chars }, i) => {
+      if (img) gsap.set(img, {
+        opacity: i === 0 ? 1 : 0,
+        scale: 1,
+        transformOrigin: '50% 50%'
+      });
+      if (chars.length) gsap.set(chars, {
+        opacity: i === 0 ? 1 : 0,
+        y: i === 0 ? 0 : CHAR_Y_OFFSET
+      });
     });
 
     const tl = gsap.timeline({
       defaults: { ease: 'none' },
       scrollTrigger: {
         trigger: component,
+        pin: pinTarget, // GSAP-managed pin, independent of CSS sticky / ancestor transform issues
+        pinSpacing: true, // inserts the spacer -- replaces our old manual height calc
         start: 'top top',
-        end: '+=' + animationVH +
-          '%', // the pinned distance ONLY -- not the full section height
+        end: '+=' + animationVH + '%',
         scrub: true,
         invalidateOnRefresh: true,
-        markers: true
+        refreshPriority: 1
       }
     });
 
-    const expandDuration = EXPAND_VH / 100;
-    const stepDuration = STEP_VH / 100;
-    const swapDuration = stepDuration * 0.4;
+    tl.to(mask, { clipPath: clipTo, duration: expandDuration, ease: EXPAND_EASE }, 0);
 
-    // PART 1: clip expand
-    tl.to(mask, { clipPath: clipTo, duration: expandDuration }, 0);
-
-    // PART 2: each panel gets a full stepDuration window; crossfade happens in its final 40%
     for (let i = 0; i < panelData.length - 1; i++) {
       const current = panelData[i];
       const next = panelData[i + 1];
-      const windowEnd = expandDuration + (i + 1) * stepDuration;
+      const windowEnd = windows[i].end;
       const stepStart = windowEnd - swapDuration;
 
-      if (current.img) tl.to(current.img, { opacity: 0, duration: swapDuration }, stepStart);
-      if (next.img) tl.to(next.img, { opacity: 1, duration: swapDuration }, stepStart);
-      if (current.text) tl.to(current.text, { yPercent: -100, duration: swapDuration },
-        stepStart);
-      if (next.text) tl.to(next.text, { yPercent: 0, duration: swapDuration }, stepStart);
+      if (current.img) tl.to(current.img, {
+        opacity: 0,
+        duration: swapDuration,
+        ease: CROSSFADE_EASE
+      }, stepStart);
+      if (next.img) tl.to(next.img, {
+        opacity: 1,
+        duration: swapDuration,
+        ease: CROSSFADE_EASE
+      }, stepStart);
+
+      if (current.chars.length) {
+        tl.to(current.chars, {
+          opacity: 0,
+          y: -CHAR_Y_OFFSET,
+          duration: swapDuration,
+          stagger: CHAR_STAGGER,
+          ease: CROSSFADE_EASE
+        }, stepStart);
+      }
+      if (next.chars.length) {
+        tl.to(next.chars, {
+          opacity: 1,
+          y: 0,
+          duration: swapDuration,
+          stagger: CHAR_STAGGER,
+          ease: CROSSFADE_EASE
+        }, stepStart);
+      }
     }
 
-    // Pad the timeline through the LAST panel's full window --
-    // without this, tl.duration() ends at the final crossfade and everything before it gets compressed.
-    const finalWindowEnd = expandDuration + panelData.length * stepDuration;
-    tl.set({}, {}, finalWindowEnd);
-  });
-}
+    panelData.forEach(({ img }, i) => {
+      if (!img) return;
+      const { start, end } = windows[i];
+      tl.fromTo(img, { scale: 1 }, { scale: PARALLAX_SCALE_TO, duration: end - start },
+        start);
+    });
 
-if (document.readyState !== 'loading') initScrollText();
-else initScrollText();
+    tl.set({}, {}, totalDuration);
+  });
+
+  // Initial refresh, same as before
+  if (window.lenis) window.lenis.resize();
+  ScrollTrigger.refresh();
+
+}
