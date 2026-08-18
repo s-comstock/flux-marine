@@ -1,3 +1,7 @@
+/*--------------------
+Metric Converter JS
+--------------------*/
+
 const UNIT_PAIRS = [
   {
     sourceAttr: 'data-pkg-hp', // attribute holding the horsepower element
@@ -69,5 +73,3 @@ function initMetricConverter() {
     convertUnitPairsWithin(spec);
   });
 }
-
-initMetricConverter();
