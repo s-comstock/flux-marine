@@ -1,0 +1,26 @@
+/*-------------------- 
+  Tab Scroll Component CSS
+-------------------- */
+
+[data-tab-control-heading]::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--_color-schemes---text);
+  opacity: 0;
+  transition: all 0.4s ease-in;
+  margin-right: .5rem;
+  margin-bottom: .25rem;
+
+  @media screen and (max-width: 767px) {
+    position: absolute;
+    left: .25rem;
+    top: .25rem;
+  }
+}
+
+.w--current [data-tab-control-heading]::before {
+  opacity: 1;
+}
