@@ -1,0 +1,19 @@
+/*-------------------- 
+  Footer CSS
+-------------------- */
+
+[data-footer-cta],
+[data-footer-cta-text],
+[data-footer-cta-icon] {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-footer-cta]:hover [data-footer-cta-text] {
+  padding-left: .5rem;
+}
+
+[data-footer-cta]:hover [data-footer-cta-icon] {
+  color: var(--_color-schemes---button-secondary--text-hover);
+  background: var(--_color-schemes---button-secondary--background-hover);
+  border: 1px solid var(--_color-schemes---button-secondary--border-hover);
+}
