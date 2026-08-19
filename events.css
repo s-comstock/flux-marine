@@ -1,0 +1,7 @@
+/*-------------------- 
+  Events CSS
+-------------------- */
+
+.events_component:last-child {
+  border-bottom: none;
+}
