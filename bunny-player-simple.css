@@ -1,0 +1,68 @@
+/*-------------------- 
+  Bunny Player Simple CSS
+-------------------- */
+
+/* Animation */
+[data-bunny-player-init] :is(.bunny-player_placeholder, .bunny-player_dark, .bunny-player_playpause, .bunny-player_loading) {
+  transition: opacity 0.3s linear, visibility 0.3s linear;
+}
+
+/* Placeholder */
+[data-bunny-player-init][data-player-status="playing"] .bunny-player_placeholder,
+[data-bunny-player-init][data-player-status="paused"] .bunny-player_placeholder,
+[data-bunny-player-init][data-player-activated="true"][data-player-status="ready"] .bunny-player_placeholder {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Dark Overlay */
+[data-bunny-player-init][data-player-status="paused"] .bunny-player_dark,
+[data-bunny-player-init][data-player-status="playing"][data-player-hover="active"] .bunny-player_dark {
+  opacity: 0.3;
+}
+
+[data-bunny-player-init][data-player-status="playing"] .bunny-player_dark {
+  opacity: 0;
+}
+
+/* Play/Pause */
+[data-bunny-player-init][data-player-status="playing"] .bunny-player_playpause,
+[data-bunny-player-init][data-player-status="loading"] .bunny-player_playpause {
+  opacity: 0;
+}
+
+[data-bunny-player-init][data-player-status="playing"][data-player-hover="active"] .bunny-player_playpause {
+  opacity: 1;
+}
+
+[data-bunny-player-init][data-player-status="playing"] .bunny-player_play-svg,
+[data-bunny-player-init][data-player-status="loading"] .bunny-player_play-svg {
+  display: none;
+}
+
+[data-bunny-player-init][data-player-status="playing"] .bunny-player_pause-svg,
+[data-bunny-player-init][data-player-status="loading"] .bunny-player_pause-svg {
+  display: block;
+}
+
+/* Loading */
+[data-bunny-player-init][data-player-status="loading"] .bunny-player_loading {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Cover Mode */
+[data-bunny-player-init][data-player-update-size="cover"] {
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+[data-bunny-player-init][data-player-update-size="cover"] [data-player-before] {
+  display: none;
+}
+
+[data-bunny-player-init][data-player-update-size="cover"][data-player-fullscreen="false"] .bunny-player_video {
+  object-fit: cover;
+}
