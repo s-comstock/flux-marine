@@ -1,0 +1,14 @@
+/*-------------------- 
+  Accordion Card CSS
+-------------------- */
+
+/* Keyboard focus indicator */
+[data-accordion-button]:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Ensure content region is not focusable itself */
+[data-accordion-hidden] {
+  outline: none;
+}
