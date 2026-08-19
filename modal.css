@@ -1,0 +1,35 @@
+/*-------------------- 
+  Modal Component CSS
+-------------------- */
+
+/* Modal button scroll states */
+/* Button Primary Scroll States */
+[data-modal-buttons-wrap][is-scrolled] [data-wf--button--style="primary"],
+[data-modal-buttons-wrap][is-scrolled] [data-modal-close] {
+  --_color-schemes---button-primary--text: var(--base-color-neutral--white);
+  --_color-schemes---button-primary--background: var(--base-color-brand--dark);
+  --_color-schemes---button-primary--border: var(--base-color-brand--dark);
+  --_color-schemes---button-primary--text-hover: var(--base-color-brand--dark);
+  --_color-schemes---button-primary--background-hover: var(--base-color-brand--transparent);
+  --_color-schemes---button-primary--border-hover: var(--base-color-brand--dark);
+}
+
+/* Button Secondary Scroll States */
+[data-modal-buttons-wrap][is-scrolled] [data-wf--button--style="secondary"],
+[data-modal-buttons-wrap][is-scrolled] [data-modal-close] {
+  --_color-schemes---button-secondary--text: var(--base-color-brand--dark);
+  --_color-schemes---button-secondary--background: var(--base-color-brand--transparent);
+  --_color-schemes---button-secondary--border: var(--base-color-brand--dark);
+  --_color-schemes---button-secondary--text-hover: var(--base-color-neutral--white);
+  --_color-schemes---button-secondary--background-hover: var(--base-color-brand--dark);
+  --_color-schemes---button-secondary--border-hover: var(--base-color-neutral--white);
+}
+
+/* Text Link Scroll States */
+[data-modal-buttons-wrap][is-scrolled] [data-wf--button--style="text-link"],
+[data-modal-buttons-wrap][is-scrolled] [data-modal-close] {
+  --_color-schemes---link--text: var(--base-color-brand--dark);
+  --_color-schemes---link--background: var(--base-color-brand--transparent);
+  --_color-schemes---link--border: var(--base-color-brand--transparent);
+  --_color-schemes---link--text-hover: var(--base-color-brand--dark);
+}
