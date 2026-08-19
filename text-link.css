@@ -1,0 +1,43 @@
+/*-------------------- 
+  Text Link CSS
+-------------------- */
+
+/* Desktop Text Link and Nav Styling Styling */
+[data-wf--button--style="text-link"],
+[data-wf--modal-button--style="text-link"],
+[data-nav-link] {
+  position: relative;
+}
+
+[data-wf--button--style="text-link"]::after,
+[data-wf--modal-button--style="text-link"]::after,
+[data-nav-link]::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background: var(--_color-schemes---text);
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+
+@media screen and (min-width: 991px) {
+
+  /* Hover only on desktop */
+  [data-wf--button--style="text-link"]:hover::after,
+  [data-wf--modal-button--style="text-link"]:hover::after,
+  [data-nav-link]:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+}
+
+/* Mobile Nav Items Underline */
+@media screen and (max-width: 991px) {
+  [data-nav-link]::after {
+    background: var(--_color-schemes---border);
+  }
+}
