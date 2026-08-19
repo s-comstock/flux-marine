@@ -1,0 +1,33 @@
+/*-------------------- 
+  Bunny Background CSS
+-------------------- */
+
+/* Animation */
+[data-bunny-background-init] :is(.bunny-bg_placeholder, .bunny-bg_loading) {
+  transition: opacity 0.3s linear, visibility 0.3s linear;
+}
+
+/* Placeholder */
+[data-bunny-background-init][data-player-status="playing"] .bunny-bg_placeholder,
+[data-bunny-background-init][data-player-status="paused"] .bunny-bg_placeholder,
+[data-bunny-background-init][data-player-activated="true"][data-player-status="ready"] .bunny-bg_placeholder {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Play/Pause */
+[data-bunny-background-init][data-player-status="playing"] .bunny-bg_play-svg,
+[data-bunny-background-init][data-player-status="loading"] .bunny-bg_play-svg {
+  display: none;
+}
+
+[data-bunny-background-init][data-player-status="playing"] .bunny-bg_pause-svg,
+[data-bunny-background-init][data-player-status="loading"] .bunny-bg_pause-svg {
+  display: block;
+}
+
+/* Loading */
+[data-bunny-background-init][data-player-status="loading"] .bunny-bg_loading {
+  opacity: 1;
+  visibility: visible;
+}
