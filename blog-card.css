@@ -1,0 +1,10 @@
+/*-------------------- 
+  Blog Card CSS
+-------------------- */
+[data-blog-card-component] [data-background-img] {
+  transition: all 0.4s ease-out;
+}
+
+[data-blog-card-component]:hover [data-background-img] {
+  scale: 1.05;
+}
