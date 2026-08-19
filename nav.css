@@ -1,0 +1,78 @@
+/*-------------------- 
+  Nav CSS
+  Note: Some nav items are included in the text-link-styles
+-------------------- */
+
+/* Display Mobile Menu in Designer */
+@media screen and (max-width: 991px) {
+  .wf-design-mode :where([data-menu-status="open"]) {
+    [data-nav-menu] {
+      display: block;
+      height: calc(100vh - 1rem);
+    }
+  }
+}
+
+[data-nav-component] [data-nav-bar] {
+  transition: all .8s cubic-bezier(.165, .84, .44, 1);
+}
+
+/* Nav on Desktop */
+@media screen and (min-width: 991px) {
+
+  /* Nav Component Scroll States */
+  [data-nav-component][is-scrolled] [data-nav-bar] {
+    --_color-schemes---text: var(--base-color-brand--dark);
+    background: var(--base-color-brand--overlay);
+    box-shadow: 0 4px 50px 0 rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(25px);
+    padding: 0rem .75rem 0rem 2rem;
+  }
+
+  /* Button Primary Scroll States */
+  [data-nav-component][is-scrolled] [data-wf--button--style="primary"] {
+    --_color-schemes---button-primary--text: var(--base-color-neutral--white);
+    --_color-schemes---button-primary--background: var(--base-color-brand--dark);
+    --_color-schemes---button-primary--border: var(--base-color-brand--dark);
+    --_color-schemes---button-primary--text-hover: var(--base-color-brand--dark);
+    --_color-schemes---button-primary--background-hover: var(--base-color-brand--transparent);
+    --_color-schemes---button-primary--border-hover: var(--base-color-brand--dark);
+  }
+
+  /* Button Secondary Scroll States */
+  [data-nav-component][is-scrolled] [data-wf--button--style="secondary"] {
+    --_color-schemes---button-secondary--text: var(--base-color-brand--dark);
+    --_color-schemes---button-secondary--background: var(--base-color-brand--transparent);
+    --_color-schemes---button-secondary--border: var(--base-color-brand--dark);
+    --_color-schemes---button-secondary--text-hover: var(--base-color-neutral--white);
+    --_color-schemes---button-secondary--background-hover: var(--base-color-brand--dark);
+    --_color-schemes---button-secondary--border-hover: var(--base-color-neutral--white);
+  }
+
+  /* Text Link Scroll States */
+  [data-nav-component][is-scrolled] [data-wf--button--style="text-link"] {
+    --_color-schemes---link--text: var(--base-color-brand--dark);
+    --_color-schemes---link--background: var(--base-color-brand--transparent);
+    --_color-schemes---link--border: var(--base-color-brand--transparent);
+    --_color-schemes---link--text-hover: var(--base-color-brand--dark);
+  }
+
+}
+
+/* Nav Scroll on Mobile */
+@media screen and (max-width: 991px) {
+
+  [data-nav-button] {
+    width: 100%;
+  }
+
+  [data-nav-button] .button-text {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
+
+  [data-nav-button] .button_text-window {
+    height: 1.5rem;
+  }
+
+}
