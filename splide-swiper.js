@@ -2,7 +2,7 @@
 Splide Swiper JS
 --------------------*/
 
-function splideSwiperInit() {
+function initSplideSwiper() {
   document.querySelectorAll('.splide').forEach((el) => {
     /* initialize Splide slider */
     const splide = new Splide(el, { // ← Pass 'el' not '.splide'
