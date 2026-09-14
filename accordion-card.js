@@ -2,13 +2,17 @@
 Accordion Card JS
 --------------------*/
 
-function accordionCardInit() {
+function initAccordionCard() {
+
+  const cards = document.querySelectorAll('[data-accordion-card-component]');
+
+  if (!cards.length) return;
+
   const fluxCurve = CustomEase.create("custom",
     "M0,0 C0,0.415 0.105,0.625 0.249,0.788 0.455,1.021 0.818,1.001 1,1 "
   );
-  const reverseCurve = fluxCurve;
 
-  const cards = document.querySelectorAll('[data-accordion-card-component]');
+  const reverseCurve = fluxCurve;
 
   cards.forEach((card, index) => {
     const button = card.querySelector('button');
